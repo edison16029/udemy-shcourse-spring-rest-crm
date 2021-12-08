@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,5 +36,16 @@ public class CustomerRestController {
 		}
 		
 		return customer;
+	}
+	
+	@PostMapping("/customers")
+	public Customer addCustomer(@RequestBody Customer theCustomer) {
+		
+		//Just in case if the client passes an Id, we should still perform insert as this is POST operation (not PUT operation)
+		theCustomer.setId(0); //Id 0 will perform insert in hibernate
+		
+		customerService.saveCustomer(theCustomer);
+
+		return theCustomer;
 	}
 }
